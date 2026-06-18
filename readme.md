@@ -39,7 +39,7 @@
 
 1. 下载安装脚本：
    ```bash
-   curl -O https://你的域名/install.sh
+   curl -O https://raw.githubusercontent.com/h2dcc/simple-server-monitor/main/install.sh
    ```
 2. 以 root 运行，指定你的唯一 token（每台机器应使用不同 token）：
    ```bash
@@ -47,15 +47,15 @@
    ./install.sh <你的TOKEN>
    ```
    安装脚本会自动：
-   - 创建低权限用户 `hyruo`
-   - 将客户端脚本安装到 `/opt/hyruo/client.sh`
-   - 将 token 安全存储在 `/opt/hyruo/env`（仅 root 可读）
+   - 创建低权限用户 `simple`
+   - 将客户端脚本安装到 `/opt/simple/client.sh`
+   - 将 token 安全存储在 `/opt/simple/env`（仅 root 可读）
    - 注册 `systemd` 服务并立即启动
 
 3. 查看运行状态：
    ```bash
-   systemctl status hyruo
-   journalctl -u hyruo -f
+   systemctl status simple
+   journalctl -u simple -f
    ```
 
 ### 服务端配置修改
@@ -88,7 +88,7 @@
 ## 安全实践
 
 - **Token 隔离**：每台客户端使用不同的 token，即使泄露也仅影响单机上报
-- **最小权限**：客户端以 `hyruo` 用户运行，脚本文件属主 root 且不可被 `hyruo` 修改
+- **最小权限**：客户端以 `simple` 用户运行，脚本文件属主 root 且不可被 `simple` 修改
 - **只读面板**：展示页面仅读取数据，没有任何写入或管理功能
 - **边缘防护**：推荐使用 Cloudflare 代理域名并配置 WAF 规则，进一步限制对 `report.php` 的访问
 - **数据库保护**：Nginx 禁止直接访问 `/data/` 目录；数据库仅存储运行指标，无 IP、密码等敏感信息
