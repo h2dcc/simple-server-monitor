@@ -16,7 +16,8 @@
 ## 演示站点
 
 🔗 [https://status.hyruo.com](https://status.hyruo.com)  
-*（页面截图：`screenshot.png`）*
+
+![截图](screenshot.png)
 
 ---
 
