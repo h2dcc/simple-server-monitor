@@ -35,13 +35,38 @@
    ```
 4. 可选：在 Cloudflare 上创建 WAF 规则，限制 `/report.php` 仅允许你的客户端 IP 访问。
 
+
+### 服务端配置修改
+
+编辑 `index.php` 和 `report.php` 中的用户配置区，填入你的节点信息：
+
+- `$TOKENS`：客户端 token 的 MD5 值（`report.php` 中需填 token 原文，`index.php` 中需填 MD5）
+- `$TRAFFIC_LIMIT`：每台服务器的流量配额（GB）
+- `$CUSTOM_TAGS`、`$EXPIRE_DATES`、`$OTHER_TAGS`：自定义标签
+
+> 如何计算 token 的 MD5？  
+> 在 Linux 终端执行：`echo -n "你的token原文" | md5sum`
+
+
+
 ### 客户端部署（在每台被监控的 VPS 上执行）
+
 
 1. 下载安装脚本：
    ```bash
    curl -O https://raw.githubusercontent.com/h2dcc/simple-server-monitor/main/install.sh
    ```
-2. 以 root 运行，指定你的唯一 token（每台机器应使用不同 token）：
+
+2. 自定义以下内容：
+   ```bash
+   APP_USER="simple"                     # 运行探针的低权限用户
+   INSTALL_DIR="/opt/simple"            # 安装目录
+   SERVICE_NAME="simple"                # systemd 服务名
+   API_URL="https://你的域名/report.php"  # 接收端的 URL（请修改！）
+   INTERVAL=30                         # 上报间隔（秒）
+   ```
+
+3. 以 root 运行，指定你的唯一 token（每台机器应使用不同 token）：
    ```bash
    chmod +x install.sh
    ./install.sh <你的TOKEN>
@@ -58,16 +83,6 @@
    journalctl -u simple -f
    ```
 
-### 服务端配置修改
-
-编辑 `index.php` 和 `report.php` 中的用户配置区，填入你的节点信息：
-
-- `$TOKENS`：客户端 token 的 MD5 值（`report.php` 中需填 token 原文，`index.php` 中需填 MD5）
-- `$TRAFFIC_LIMIT`：每台服务器的流量配额（GB）
-- `$CUSTOM_TAGS`、`$EXPIRE_DATES`、`$OTHER_TAGS`：自定义标签
-
-> 如何计算 token 的 MD5？  
-> 在 Linux 终端执行：`echo -n "你的token原文" | md5sum`
 
 ---
 
